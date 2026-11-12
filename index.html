@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom YouTube Player</title>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <style>
+    .player {
+      position: relative;
+      width: 480px;
+      height: 270px;
+    }
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .custom-play {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 68px;
+      height: 48px;
+      pointer-events: auto;
+      cursor: pointer;
+      border: 0;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 22px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="player">
+    <div id="youtube-player"></div>
+
+    <div class="overlay">
+      <button id="custom-play" class="custom-play">
+        ▶
+      </button>
+
+      <!-- Your additional custom content -->
+      <div style="position:absolute; bottom:10px; right:10px; color:white;">
+        My custom content
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let player;
+    const button = document.getElementById("custom-play");
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("youtube-player", {
+        width: "480",
+        height: "270",
+        videoId: "M7lc1UVf-VE",
+        playerVars: {
+          controls: 1,
+          playsinline: 1
+        },
+        events: {
+          onReady: function () {},
+          onStateChange: function (event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              button.textContent = "Ⅱ";
+            } else {
+              button.textContent = "▶";
+            }
+          }
+        }
+      });
+    }
+
+    button.addEventListener("click", function () {
+      if (!player) return;
+
+      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
+  </script>
+
+</body>
+</html>
